@@ -1,0 +1,6 @@
+{
+  "name": "Layanan Kecamatan Pulung",
+  "description": "Aplikasi Pelayanan Administrasi Terpadu Kecamatan Pulung, Kabupaten Ponorogo. Memudahkan masyarakat mengurus surat administrasi secara mandiri maupun didampingi perangkat desa.",
+  "requestFramePermissions": ["camera"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
