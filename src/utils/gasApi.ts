@@ -157,7 +157,22 @@ export const syncAllFromCloud = async (): Promise<{
     localStorage.setItem(STORAGE_KEYS.DESA, JSON.stringify(d.desa));
   }
   if (Array.isArray(d.layanan) && d.layanan.length > 0) {
-    localStorage.setItem(STORAGE_KEYS.LAYANAN, JSON.stringify(d.layanan));
+    const normalizedLayanan: Layanan[] = d.layanan.map((lay) => ({
+      ...lay,
+      persyaratan: Array.isArray(lay.persyaratan)
+        ? lay.persyaratan.map((p: unknown, idx: number) =>
+            typeof p === 'string'
+              ? { id: `p-${idx + 1}`, nama: p, wajib: true }
+              : {
+                  id: (p as { id?: string }).id || `p-${idx + 1}`,
+                  nama: (p as { nama?: string }).nama || String(p),
+                  wajib: (p as { wajib?: boolean }).wajib !== false,
+                  deskripsi: (p as { deskripsi?: string }).deskripsi,
+                }
+          )
+        : [],
+    }));
+    localStorage.setItem(STORAGE_KEYS.LAYANAN, JSON.stringify(normalizedLayanan));
   }
   if (Array.isArray(d.pengajuan)) {
     localStorage.setItem(STORAGE_KEYS.PENGAJUAN, JSON.stringify(d.pengajuan));

@@ -483,9 +483,15 @@ function readLayananList(ss) {
   for (var i = 1; i < rows.length; i++) {
     var reqs = [];
     try { reqs = JSON.parse(rows[i][4] || '[]'); } catch (e) {}
+    var normalizedReqs = (reqs || []).map(function(item, idx) {
+      if (typeof item === 'string') {
+        return { id: 'p-' + (idx + 1), nama: item, wajib: true };
+      }
+      return item;
+    });
     out.push({
       id: String(rows[i][0]), kategori: String(rows[i][1]), nama: String(rows[i][2]),
-      deskripsi: String(rows[i][3]), persyaratan: reqs, estimasiHari: Number(rows[i][5] || 1),
+      deskripsi: String(rows[i][3]), persyaratan: normalizedReqs, estimasiHari: Number(rows[i][5] || 1),
       aktif: rows[i][6] !== false, kodeSuratPrefix: String(rows[i][7] || '470')
     });
   }

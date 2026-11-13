@@ -83,7 +83,22 @@ export const getStoredLayanan = (): Layanan[] => {
       localStorage.setItem(STORAGE_KEYS.LAYANAN, JSON.stringify(MASTER_LAYANAN));
       return MASTER_LAYANAN;
     }
-    return JSON.parse(raw);
+    const parsed = JSON.parse(raw) as Layanan[];
+    return parsed.map((lay) => ({
+      ...lay,
+      persyaratan: Array.isArray(lay.persyaratan)
+        ? lay.persyaratan.map((p: unknown, idx: number) =>
+            typeof p === 'string'
+              ? { id: `p-${idx + 1}`, nama: p, wajib: true }
+              : {
+                  id: (p as { id?: string }).id || `p-${idx + 1}`,
+                  nama: (p as { nama?: string }).nama || String(p),
+                  wajib: (p as { wajib?: boolean }).wajib !== false,
+                  deskripsi: (p as { deskripsi?: string }).deskripsi,
+                }
+          )
+        : [],
+    }));
   } catch {
     return MASTER_LAYANAN;
   }

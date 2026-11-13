@@ -346,12 +346,16 @@ export const PublicLandingView: React.FC<PublicLandingViewProps> = ({
                     Persyaratan Utama:
                   </span>
                   <ul className="text-xs text-slate-700 space-y-1">
-                    {lay.persyaratan.slice(0, 3).map((p) => (
-                      <li key={p.id} className="flex items-start gap-1.5">
-                        <span className="text-emerald-700 font-bold">✓</span>
-                        <span className="truncate">{p.nama}</span>
-                      </li>
-                    ))}
+                    {lay.persyaratan.slice(0, 3).map((p, idx) => {
+                      const label = typeof p === 'string' ? p : p.nama;
+                      const itemKey = typeof p === 'string' ? `${lay.id}-p-${idx}` : p.id || `${lay.id}-p-${idx}`;
+                      return (
+                        <li key={itemKey} className="flex items-start gap-1.5">
+                          <span className="text-emerald-700 font-bold">✓</span>
+                          <span className="truncate">{label}</span>
+                        </li>
+                      );
+                    })}
                   </ul>
                 </div>
               </div>
